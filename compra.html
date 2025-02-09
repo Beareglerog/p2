@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">MONCOLLIER</div>
+    </header>
+
+    <main>
+        <h1>Finalizar Compra</h1>
+
+        <h2>Resumen de tu carrito:</h2>
+        <div id="resumen-carrito"></div>
+
+        <form id="formulario-compra">
+            <label for="nombre">Nombre Completo:</label>
+            <input type="text" id="nombre" required>
+
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" required>
+
+            <label for="direccion">Dirección de Envío:</label>
+            <input type="text" id="direccion" required>
+
+            <label for="metodo-pago">Método de Pago:</label>
+            <select id="metodo-pago">
+                <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+                <option value="paypal">PayPal</option>
+                <option value="transferencia">Transferencia Bancaria</option>
+            </select>
+
+            <button type="submit">Realizar Pago</button>
+        </form>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+            if (carrito.length === 0) {
+                alert("No hay productos en el carrito. Redirigiendo a la tienda...");
+                window.location.href = "index.html"; // Redirige si el carrito está vacío
+                return;
+            }
+
+            // Mostrar productos en el resumen de compra
+            let resumenCarrito = document.getElementById("resumen-carrito");
+            carrito.forEach(p => {
+                let item = document.createElement("p");
+                item.textContent = `${p.cantidad} x ${p.nombre} (€${p.precio})`;
+                resumenCarrito.appendChild(item);
+            });
+
+            // Vaciar el carrito después de completar la compra
+            document.getElementById("formulario-compra").addEventListener("submit", function (event) {
+                event.preventDefault();
+                alert("Compra realizada con éxito. ¡Gracias por tu compra!");
+
+                localStorage.removeItem("carrito"); // Vaciar el carrito
+                window.location.href = "index.html"; // Volver a la tienda
+            });
+        });
+    </script>
+</body>
+</html>
